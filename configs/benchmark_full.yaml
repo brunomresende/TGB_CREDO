@@ -1,0 +1,64 @@
+experiment_name: reproduce_paper
+seed: 125
+n_repetitions: 30
+alpha: 0.1
+datasets:
+  - concrete
+  - airfoil
+  - winewhite
+  - star
+  - winered
+  - cycle
+  - electric
+  - meps19
+  - superconductivity
+  - homes
+  - protein
+  - WEC
+split:
+  train: 0.56
+  calibration: 0.24
+  test: 0.20
+qnn:
+  hidden_layers: [128, 128, 64]
+  dropout: 0.3
+  epochs: 2000
+  patience: 50
+  learning_rate: 0.001
+  weight_decay: 0.000001
+  scheduler_step: 10
+  scheduler_gamma: 0.99
+  batch_size_small: 32
+  batch_size_large: 120
+  batch_size_wec: 250
+  n_mc_samples: 1000
+catboost:
+  iterations: 1000
+  depth: 6
+  l2_leaf_reg: 3
+  bagging_temperature: 1
+gamma:
+  fixed: 0.1
+  min: 0.1
+  max: 0.75
+  tau: 1.0
+  epsilon: 0.000001
+  neighbor_constant: 6.672
+uacqr:
+  ensemble_size: 1000
+epicscore:
+  hidden_layers: [64, 64]
+  components: 5
+  dropout: 0.5
+  epochs: 2000
+  patience: 50
+  learning_rate: 0.001
+  batch_size_small: 40
+  batch_size_large: 130
+  batch_size_wec: 250
+  n_mc_samples: 500
+outliers:
+  n_neighbors: 15
+  contamination: 0.05
+  ilr_inlier_fraction: 0.20
+  decomposition_inlier_fraction: 0.10

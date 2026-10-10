@@ -1,0 +1,11 @@
+experiment_name: synthetic
+seed: 125
+n_samples: 1500
+alpha: 0.1
+n_mc_samples: 500
+gamma:
+  fixed: 0.1
+  min: 0.1
+  max: 0.75
+  tau: 1.0
+

@@ -1,0 +1,47 @@
+experiment_name: quick
+seed: 125
+n_repetitions: 2
+alpha: 0.1
+datasets: [airfoil]
+split:
+  train: 0.56
+  calibration: 0.24
+  test: 0.20
+qnn:
+  hidden_layers: [64, 64]
+  dropout: 0.3
+  epochs: 20
+  patience: 5
+  learning_rate: 0.001
+  weight_decay: 0.000001
+  scheduler_step: 10
+  scheduler_gamma: 0.99
+  batch_size: 32
+  n_mc_samples: 30
+catboost:
+  iterations: 30
+  depth: 4
+  l2_leaf_reg: 3
+  bagging_temperature: 1
+gamma:
+  fixed: 0.1
+  min: 0.1
+  max: 0.75
+  tau: 1.0
+  epsilon: 0.000001
+uacqr:
+  ensemble_size: 20
+epicscore:
+  hidden_layers: [16, 16]
+  components: 3
+  dropout: 0.5
+  epochs: 15
+  patience: 4
+  learning_rate: 0.001
+  batch_size: 32
+  n_mc_samples: 20
+outliers:
+  n_neighbors: 15
+  contamination: 0.05
+  ilr_inlier_fraction: 0.20
+  decomposition_inlier_fraction: 0.10
