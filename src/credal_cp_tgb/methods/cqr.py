@@ -18,13 +18,13 @@ class CQRRegressor:
     relative: bool = False
     base_model_is_fitted: bool = False
 
-    def fit(self, X: ArrayLike, y: ArrayLike) -> "CQRRegressor":
+    def fit(self, X: ArrayLike, y: ArrayLike) -> CQRRegressor:
         if not self.base_model_is_fitted:
             self.base_model.fit(X, y)
             self.base_model_is_fitted = True
         return self
 
-    def calibrate(self, X: ArrayLike, y: ArrayLike) -> "CQRRegressor":
+    def calibrate(self, X: ArrayLike, y: ArrayLike) -> CQRRegressor:
         predictions = validate_interval_predictions(self.base_model.predict_quantiles(X))
         self.calibrator_ = ConformalCalibrator(alpha=self.alpha, relative=self.relative)
         self.calibrator_.fit(y, predictions[:, 0], predictions[:, 1])

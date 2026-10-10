@@ -1,14 +1,12 @@
 """Tabela pequena de CQR-QNN e CREDO-QNN no cenario sintetico."""
 
 import pandas as pd
+from _shared import fitted_qnn, small_problem
 
 from credal_cp_tgb.credal.gamma import AdaptiveGamma, FixedGamma
 from credal_cp_tgb.evaluation.metrics import evaluate_intervals
 from credal_cp_tgb.methods.cqr import CQRRegressor
 from credal_cp_tgb.methods.credo import CredalRegressor
-
-from _shared import fitted_qnn, small_problem
-
 
 split = small_problem()
 qnn = fitted_qnn(split)

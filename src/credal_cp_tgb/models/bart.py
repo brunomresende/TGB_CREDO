@@ -23,7 +23,7 @@ class HeteroscedasticBART:
     progressbar: bool = False
     random_state: int = 1250
 
-    def fit(self, X: ArrayLike, y: ArrayLike) -> "HeteroscedasticBART":
+    def fit(self, X: ArrayLike, y: ArrayLike) -> HeteroscedasticBART:
         try:
             import pymc as pm
             import pymc_bart as pmb

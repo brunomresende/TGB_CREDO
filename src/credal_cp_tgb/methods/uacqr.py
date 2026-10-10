@@ -25,7 +25,7 @@ class UACQRRegressor:
     epsilon: float = 1e-5
     random_state: int = 125
 
-    def fit(self, X: ArrayLike, y: ArrayLike) -> "UACQRRegressor":
+    def fit(self, X: ArrayLike, y: ArrayLike) -> UACQRRegressor:
         if not self.base_model_is_fitted:
             self.base_model.fit(X, y)
             self.base_model_is_fitted = True
@@ -49,7 +49,7 @@ class UACQRRegressor:
         )
         return base, lower_draws, upper_draws, lower_order, upper_order
 
-    def calibrate(self, X: ArrayLike, y: ArrayLike) -> "UACQRRegressor":
+    def calibrate(self, X: ArrayLike, y: ArrayLike) -> UACQRRegressor:
         y_arr = np.asarray(y, dtype=float).reshape(-1)
         base, lower, upper, lower_order, upper_order = self._components(X)
 

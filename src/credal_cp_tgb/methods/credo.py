@@ -22,7 +22,7 @@ class CredalRegressor:
     base_model_is_fitted: bool = False
     random_state: int = 125
 
-    def fit(self, X: ArrayLike, y: ArrayLike) -> "CredalRegressor":
+    def fit(self, X: ArrayLike, y: ArrayLike) -> CredalRegressor:
         if not self.base_model_is_fitted:
             self.base_model.fit(X, y)
             self.base_model_is_fitted = True
@@ -47,7 +47,7 @@ class CredalRegressor:
         decomposition = np.column_stack((aleatoric, epistemic, total))
         return envelope, gamma, decomposition
 
-    def calibrate(self, X: ArrayLike, y: ArrayLike) -> "CredalRegressor":
+    def calibrate(self, X: ArrayLike, y: ArrayLike) -> CredalRegressor:
         envelope, gamma, decomposition = self._raw_envelope(X)
         self.calibrator_ = ConformalCalibrator(alpha=self.alpha).fit(
             y, envelope[:, 0], envelope[:, 1]

@@ -10,7 +10,6 @@ from __future__ import annotations
 from pathlib import Path
 from urllib.request import urlretrieve
 
-
 DATASET_URLS = {
     "airfoil": "https://archive.ics.uci.edu/ml/machine-learning-databases/00291/airfoil_self_noise.dat",
     "concrete": "https://archive.ics.uci.edu/ml/machine-learning-databases/concrete/compressive/Concrete_Data.xls",

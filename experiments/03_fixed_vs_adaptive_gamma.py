@@ -1,10 +1,9 @@
 """Compara CREDO-QNN fixo e adaptativo no mesmo modelo treinado."""
 
-from credal_cp_tgb.credal.gamma import AdaptiveGamma, FixedGamma
-from credal_cp_tgb.methods.credo import CredalRegressor
-
 from _shared import fitted_qnn, plot_intervals, small_problem
 
+from credal_cp_tgb.credal.gamma import AdaptiveGamma, FixedGamma
+from credal_cp_tgb.methods.credo import CredalRegressor
 
 split = small_problem()
 qnn = fitted_qnn(split)

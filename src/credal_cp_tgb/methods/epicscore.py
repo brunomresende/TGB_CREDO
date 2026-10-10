@@ -64,7 +64,7 @@ class EPICScoreRegressor:
     random_state: int = 125
     device: str = "cpu"
 
-    def fit(self, X: ArrayLike, y: ArrayLike) -> "EPICScoreRegressor":
+    def fit(self, X: ArrayLike, y: ArrayLike) -> EPICScoreRegressor:
         if not self.base_model_is_fitted:
             self.base_model.fit(X, y)
             self.base_model_is_fitted = True
@@ -157,7 +157,7 @@ class EPICScoreRegressor:
         scaled_cutoff = np.quantile(samples, probability, axis=0)
         return self.score_scaler_.inverse_transform(scaled_cutoff[:, None]).reshape(-1)
 
-    def calibrate(self, X: ArrayLike, y: ArrayLike) -> "EPICScoreRegressor":
+    def calibrate(self, X: ArrayLike, y: ArrayLike) -> EPICScoreRegressor:
         X_arr = np.asarray(X, dtype=float)
         y_arr = np.asarray(y, dtype=float).reshape(-1)
         predictions = validate_interval_predictions(self.base_model.predict_quantiles(X_arr))

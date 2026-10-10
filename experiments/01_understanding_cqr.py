@@ -1,9 +1,8 @@
 """Exemplo minimo: quantis da QNN, scores e expansao conformal."""
 
-from credal_cp_tgb.methods.cqr import CQRRegressor
-
 from _shared import fitted_qnn, plot_intervals, small_problem
 
+from credal_cp_tgb.methods.cqr import CQRRegressor
 
 split = small_problem()
 qnn = fitted_qnn(split)

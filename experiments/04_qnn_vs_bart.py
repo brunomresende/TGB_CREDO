@@ -1,11 +1,10 @@
 """Compara backends QNN e BART; requer o extra ``bart``."""
 
+from _shared import fitted_qnn, plot_intervals, small_problem
+
 from credal_cp_tgb.credal.gamma import AdaptiveGamma
 from credal_cp_tgb.methods.credo import CredalRegressor
 from credal_cp_tgb.models.bart import HeteroscedasticBART
-
-from _shared import fitted_qnn, plot_intervals, small_problem
-
 
 split = small_problem()
 models = {

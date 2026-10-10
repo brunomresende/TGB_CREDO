@@ -6,7 +6,6 @@ from pathlib import Path
 
 from credal_cp_tgb.data.download import DATASET_URLS, download_dataset
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("dataset", choices=sorted(DATASET_URLS))
 parser.add_argument("--destination", default=None)

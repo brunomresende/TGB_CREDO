@@ -14,7 +14,7 @@ from sklearn.preprocessing import StandardScaler
 class FixedGamma:
     gamma: float = 0.1
 
-    def fit(self, X: ArrayLike) -> "FixedGamma":
+    def fit(self, X: ArrayLike) -> FixedGamma:
         if not 0 < self.gamma < 1:
             raise ValueError("gamma deve estar entre 0 e 1.")
         self.is_fitted_ = True
@@ -35,7 +35,7 @@ class AdaptiveGamma:
     neighbor_constant: float = 6.672
     n_neighbors: int | None = None
 
-    def fit(self, X: ArrayLike) -> "AdaptiveGamma":
+    def fit(self, X: ArrayLike) -> AdaptiveGamma:
         X_arr = np.asarray(X, dtype=float)
         if X_arr.ndim != 2:
             raise ValueError("X deve ser uma matriz bidimensional.")

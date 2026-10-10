@@ -16,7 +16,7 @@ class ConformalCalibrator:
     relative: bool = False
     epsilon: float = 1e-5
 
-    def fit(self, y: ArrayLike, lower: ArrayLike, upper: ArrayLike) -> "ConformalCalibrator":
+    def fit(self, y: ArrayLike, lower: ArrayLike, upper: ArrayLike) -> ConformalCalibrator:
         score_fn = relative_quantile_scores if self.relative else quantile_scores
         if self.relative:
             self.scores_ = score_fn(y, lower, upper, epsilon=self.epsilon)

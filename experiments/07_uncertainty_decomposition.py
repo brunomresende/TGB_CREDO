@@ -2,12 +2,10 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+from _shared import fitted_qnn, small_problem
 
 from credal_cp_tgb.credal.gamma import AdaptiveGamma
 from credal_cp_tgb.methods.credo import CredalRegressor
-
-from _shared import fitted_qnn, small_problem
-
 
 split = small_problem()
 qnn = fitted_qnn(split)

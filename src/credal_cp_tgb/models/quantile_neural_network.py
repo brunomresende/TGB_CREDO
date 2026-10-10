@@ -6,9 +6,9 @@ CQR usa ``predict_quantiles`` em modo deterministico. CREDO usa
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Sequence
 
 import numpy as np
 import torch
@@ -88,7 +88,7 @@ class QuantileNeuralNetwork:
         if torch.cuda.is_available():
             torch.cuda.manual_seed_all(seed)
 
-    def fit(self, X: ArrayLike, y: ArrayLike) -> "QuantileNeuralNetwork":
+    def fit(self, X: ArrayLike, y: ArrayLike) -> QuantileNeuralNetwork:
         self._seed()
         X_arr = np.asarray(X, dtype=np.float32)
         y_arr = np.asarray(y, dtype=np.float32).reshape(-1)

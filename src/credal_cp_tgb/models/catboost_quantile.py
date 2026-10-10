@@ -21,7 +21,7 @@ class CatBoostQuantileRegressor:
     thread_count: int = -1
     extra_params: dict = field(default_factory=dict)
 
-    def fit(self, X: ArrayLike, y: ArrayLike) -> "CatBoostQuantileRegressor":
+    def fit(self, X: ArrayLike, y: ArrayLike) -> CatBoostQuantileRegressor:
         try:
             from catboost import CatBoostRegressor
         except ImportError as error:

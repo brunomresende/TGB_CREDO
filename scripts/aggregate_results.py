@@ -8,7 +8,6 @@ import pandas as pd
 
 from credal_cp_tgb.evaluation.aggregation import aggregate_metrics
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("metrics_csv")
 parser.add_argument("--output", default=None)
