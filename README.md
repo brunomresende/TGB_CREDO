@@ -1,73 +1,98 @@
 # credal_cp_tgb
 
-Implementacao didatica e reproduzivel do metodo **CREDO** (*Epistemic-Aware
+Implementação didática e reproduzível do método **CREDO** (*Epistemic-Aware
 Conformalized Credal Envelopes for Regression*).
 
-O projeto separa explicitamente as quatro etapas do metodo:
+O código, a documentação, os nomes de funções, as classes, os experimentos e as
+configurações estão em português. Permanecem em inglês apenas nomes impostos por
+bibliotecas externas, siglas científicas e convenções da linguagem, como o método
+`forward` do PyTorch e o diretório de empacotamento `src`.
+
+O projeto separa explicitamente as quatro etapas do método:
 
 ```text
-modelo quantilico -> amostras de quantis -> envelope credal -> calibracao conformal
+modelo quantílico -> amostras de quantis -> envelope credal -> calibração conformal
 ```
 
 ## Objetivos
 
 - reproduzir o protocolo experimental do artigo;
-- manter CREDO com QNN/MC Dropout e BART heteroscedastico;
+- manter CREDO com QNN/MC Dropout e BART heteroscedástico;
 - comparar com CQR, CQR-r, UACQR-S, UACQR-P e EPICScore;
-- incluir CQR-QNN e CQR-r-QNN para uma comparacao controlada;
-- documentar as formulas em portugues e manter a API em ingles;
-- registrar configuracoes, sementes e resultados brutos.
+- incluir CQR-QNN e CQR-r-QNN para uma comparação controlada;
+- explicar as fórmulas e a implementação em português;
+- registrar configurações, sementes e resultados brutos.
 
-## Comparacao controlada com QNN
+## Estrutura
 
-A mesma QNN treinada pode ser compartilhada pelos quatro metodos:
+```text
+configuracoes/       parâmetros das comparações
+dados/               dados brutos e processados
+documentacao/        metodologia e decisões de equivalência
+experimentos/        exemplos didáticos numerados
+resultados/           saídas brutas, resumos, tabelas e figuras
+scripts/              pontos de entrada executáveis
+src/credal_cp_tgb/    implementação da biblioteca
+testes/               testes automatizados
+```
 
-| Metodo | Dropout no treino | Dropout na inferencia |
+Dentro da biblioteca, os módulos principais são `modelos`, `metodos`, `conformal`,
+`credal`, `avaliacao`, `dados` e `utilitarios`.
+
+## Comparação controlada com QNN
+
+A mesma QNN treinada é compartilhada pelos quatro métodos:
+
+| Método | Dropout no treino | Dropout na inferência |
 |---|---:|---:|
-| CQR-QNN | sim | nao |
-| CQR-r-QNN | sim | nao |
+| CQR-QNN | sim | não |
+| CQR-r-QNN | sim | não |
 | CREDO-QNN | sim | sim, MC Dropout |
 | CREDO-QNN adaptativo | sim | sim, MC Dropout |
 
-No MC Dropout, somente as camadas `Dropout` sao ativadas; `BatchNorm` permanece
-em avaliacao para nao alterar suas estatisticas.
+No MC Dropout, somente as camadas `Dropout` são ativadas. `BatchNorm` permanece
+em avaliação para não alterar suas estatísticas.
 
-## Instalacao
+## Instalação
+
+Com `uv`, incluindo todos os métodos e ferramentas de desenvolvimento:
+
+```bash
+uv sync --extra completo
+```
+
+Com `pip`:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -e '.[dev,catboost]'
-```
-
-Para incluir BART:
-
-```bash
-pip install -e '.[full]'
+pip install -e '.[completo]'
 ```
 
 ## Testes
 
 ```bash
-pytest
+uv run pytest
 ```
 
-## Execucao
+## Execução
 
-Modo rapido:
+Modo rápido:
 
 ```bash
-python scripts/run_experiment.py --config configs/benchmark_quick.yaml
+uv run python scripts/executar_experimento.py \
+  --configuracao configuracoes/comparacao_rapida.yaml
 ```
 
-O perfil completo preserva os valores do artigo, mas demanda muito tempo:
+O perfil completo preserva os valores experimentais do artigo, mas demanda muito
+tempo:
 
 ```bash
-python scripts/run_all_benchmarks.py --config configs/benchmark_full.yaml
+uv run python scripts/executar_todas_comparacoes.py \
+  --configuracao configuracoes/comparacao_completa.yaml
 ```
 
-## Referencia
+## Referência
 
 L. M. C. Cabezas et al., *CREDO: Epistemic-Aware Conformalized Credal
 Envelopes for Regression*, arXiv:2603.06826.
-

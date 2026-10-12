@@ -1,0 +1,10 @@
+nome_experimento: sintetico
+semente: 125
+numero_amostras: 1500
+alpha: 0.1
+numero_amostras_mc: 500
+gamma:
+  fixo: 0.1
+  minimo: 0.1
+  maximo: 0.75
+  tau: 1.0

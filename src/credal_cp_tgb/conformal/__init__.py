@@ -1,10 +1,9 @@
-from .calibration import ConformalCalibrator
-from .scores import conformal_cutoff, quantile_scores, relative_quantile_scores
+from .calibracao import CalibradorConformal
+from .escores import escores_quantilicos, escores_quantilicos_relativos, limiar_conformal
 
 __all__ = [
-    "ConformalCalibrator",
-    "conformal_cutoff",
-    "quantile_scores",
-    "relative_quantile_scores",
+    "CalibradorConformal",
+    "escores_quantilicos",
+    "escores_quantilicos_relativos",
+    "limiar_conformal",
 ]
-

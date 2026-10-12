@@ -382,12 +382,7 @@ bart = [
 catboost = [
     { name = "catboost" },
 ]
-dev = [
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "ruff" },
-]
-full = [
+completo = [
     { name = "arviz" },
     { name = "catboost" },
     { name = "pymc" },
@@ -396,33 +391,38 @@ full = [
     { name = "pytest-cov" },
     { name = "ruff" },
 ]
+desenvolvimento = [
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "arviz", marker = "extra == 'bart'", specifier = "==0.22.0" },
-    { name = "arviz", marker = "extra == 'full'", specifier = "==0.22.0" },
+    { name = "arviz", marker = "extra == 'completo'", specifier = "==0.22.0" },
     { name = "catboost", marker = "extra == 'catboost'", specifier = ">=1.2" },
-    { name = "catboost", marker = "extra == 'full'", specifier = ">=1.2" },
+    { name = "catboost", marker = "extra == 'completo'", specifier = ">=1.2" },
     { name = "matplotlib", specifier = ">=3.9" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "pandas", specifier = ">=2.0" },
     { name = "pymc", marker = "extra == 'bart'", specifier = "==5.26.1" },
-    { name = "pymc", marker = "extra == 'full'", specifier = "==5.26.1" },
+    { name = "pymc", marker = "extra == 'completo'", specifier = "==5.26.1" },
     { name = "pymc-bart", marker = "extra == 'bart'", specifier = "==0.11.0" },
-    { name = "pymc-bart", marker = "extra == 'full'", specifier = "==0.11.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
-    { name = "pytest", marker = "extra == 'full'", specifier = ">=8" },
-    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5" },
-    { name = "pytest-cov", marker = "extra == 'full'", specifier = ">=5" },
+    { name = "pymc-bart", marker = "extra == 'completo'", specifier = "==0.11.0" },
+    { name = "pytest", marker = "extra == 'completo'", specifier = ">=8" },
+    { name = "pytest", marker = "extra == 'desenvolvimento'", specifier = ">=8" },
+    { name = "pytest-cov", marker = "extra == 'completo'", specifier = ">=5" },
+    { name = "pytest-cov", marker = "extra == 'desenvolvimento'", specifier = ">=5" },
     { name = "pyyaml", specifier = ">=6.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.8" },
-    { name = "ruff", marker = "extra == 'full'", specifier = ">=0.8" },
+    { name = "ruff", marker = "extra == 'completo'", specifier = ">=0.8" },
+    { name = "ruff", marker = "extra == 'desenvolvimento'", specifier = ">=0.8" },
     { name = "scikit-learn", specifier = ">=1.5" },
     { name = "scipy", specifier = ">=1.14" },
     { name = "torch", specifier = ">=2.3" },
     { name = "tqdm", specifier = ">=4.66" },
 ]
-provides-extras = ["catboost", "bart", "dev", "full"]
+provides-extras = ["catboost", "bart", "desenvolvimento", "completo"]
 
 [[package]]
 name = "cuda-bindings"

@@ -1,4 +1,4 @@
-"""Estrategias fixa e adaptativa para o nivel credal gamma."""
+"""Estratégias fixa e adaptativa para o nível credal gamma."""
 
 from __future__ import annotations
 
@@ -11,71 +11,77 @@ from sklearn.preprocessing import StandardScaler
 
 
 @dataclass
-class FixedGamma:
+class GammaFixo:
     gamma: float = 0.1
 
-    def fit(self, X: ArrayLike) -> FixedGamma:
+    def ajustar(self, X: ArrayLike) -> GammaFixo:
         if not 0 < self.gamma < 1:
             raise ValueError("gamma deve estar entre 0 e 1.")
-        self.is_fitted_ = True
+        self.ajustado_ = True
         return self
 
-    def compute(self, X: ArrayLike) -> NDArray[np.float64]:
-        if not hasattr(self, "is_fitted_"):
-            raise RuntimeError("Execute fit antes de compute.")
+    def calcular(self, X: ArrayLike) -> NDArray[np.float64]:
+        if not hasattr(self, "ajustado_"):
+            raise RuntimeError("Execute ajustar antes de calcular.")
         return np.full(np.asarray(X).shape[0], self.gamma, dtype=float)
 
 
 @dataclass
-class AdaptiveGamma:
-    gamma_min: float = 0.1
-    gamma_max: float = 0.75
+class GammaAdaptativo:
+    gamma_minimo: float = 0.1
+    gamma_maximo: float = 0.75
     tau: float = 1.0
     epsilon: float = 1e-6
-    neighbor_constant: float = 6.672
-    n_neighbors: int | None = None
+    constante_vizinhos: float = 6.672
+    numero_vizinhos: int | None = None
 
-    def fit(self, X: ArrayLike) -> AdaptiveGamma:
-        X_arr = np.asarray(X, dtype=float)
-        if X_arr.ndim != 2:
+    def ajustar(self, X: ArrayLike) -> GammaAdaptativo:
+        matriz_x = np.asarray(X, dtype=float)
+        if matriz_x.ndim != 2:
             raise ValueError("X deve ser uma matriz bidimensional.")
-        if not 0 < self.gamma_min < self.gamma_max < 1:
-            raise ValueError("Use 0 < gamma_min < gamma_max < 1.")
+        if not 0 < self.gamma_minimo < self.gamma_maximo < 1:
+            raise ValueError("Use 0 < gamma_minimo < gamma_maximo < 1.")
         if self.tau <= 0:
             raise ValueError("tau deve ser positivo.")
 
-        n, dimension = X_arr.shape
-        if self.n_neighbors is None:
-            k = int(np.ceil(self.neighbor_constant * n ** (4 / (4 + dimension))))
+        numero_amostras, dimensao = matriz_x.shape
+        if self.numero_vizinhos is None:
+            k = int(
+                np.ceil(
+                    self.constante_vizinhos
+                    * numero_amostras ** (4 / (4 + dimensao))
+                )
+            )
         else:
-            k = int(self.n_neighbors)
-        self.n_neighbors_ = max(2, min(k, n))
+            k = int(self.numero_vizinhos)
+        self.numero_vizinhos_ = max(2, min(k, numero_amostras))
 
-        self.scaler_ = StandardScaler().fit(X_arr)
-        scaled = self.scaler_.transform(X_arr)
-        self.neighbors_ = NearestNeighbors(n_neighbors=self.n_neighbors_).fit(scaled)
-        distances, _ = self.neighbors_.kneighbors(scaled)
-        kth_distances = distances[:, -1]
-        self.distance_median_ = float(np.quantile(kth_distances, 0.50))
-        self.distance_high_ = float(np.quantile(kth_distances, 0.95))
+        self.escalonador_ = StandardScaler().fit(matriz_x)
+        dados_escalonados = self.escalonador_.transform(matriz_x)
+        self.vizinhos_ = NearestNeighbors(n_neighbors=self.numero_vizinhos_).fit(
+            dados_escalonados
+        )
+        distancias, _ = self.vizinhos_.kneighbors(dados_escalonados)
+        distancias_k = distancias[:, -1]
+        self.distancia_mediana_ = float(np.quantile(distancias_k, 0.50))
+        self.distancia_alta_ = float(np.quantile(distancias_k, 0.95))
         return self
 
     @staticmethod
-    def _sigmoid(values: NDArray[np.float64]) -> NDArray[np.float64]:
-        clipped = np.clip(values, -500, 500)
-        return 1 / (1 + np.exp(-clipped))
+    def _sigmoide(valores: NDArray[np.float64]) -> NDArray[np.float64]:
+        valores_limitados = np.clip(valores, -500, 500)
+        return 1 / (1 + np.exp(-valores_limitados))
 
-    def compute(self, X: ArrayLike) -> NDArray[np.float64]:
-        if not hasattr(self, "neighbors_"):
-            raise RuntimeError("Execute fit antes de compute.")
-        scaled = self.scaler_.transform(np.asarray(X, dtype=float))
-        distances, _ = self.neighbors_.kneighbors(scaled)
-        kth = np.log1p(distances[:, -1])
-        low = np.log1p(self.distance_median_)
-        high = np.log1p(self.distance_high_)
-        scarcity = (kth - low) / (high - low + self.epsilon)
-        gamma = self.gamma_max - (
-            (self.gamma_max - self.gamma_min) * self._sigmoid(scarcity / self.tau)
+    def calcular(self, X: ArrayLike) -> NDArray[np.float64]:
+        if not hasattr(self, "vizinhos_"):
+            raise RuntimeError("Execute ajustar antes de calcular.")
+        dados_escalonados = self.escalonador_.transform(np.asarray(X, dtype=float))
+        distancias, _ = self.vizinhos_.kneighbors(dados_escalonados)
+        distancia_k = np.log1p(distancias[:, -1])
+        baixa = np.log1p(self.distancia_mediana_)
+        alta = np.log1p(self.distancia_alta_)
+        escassez = (distancia_k - baixa) / (alta - baixa + self.epsilon)
+        gamma = self.gamma_maximo - (
+            (self.gamma_maximo - self.gamma_minimo) * self._sigmoide(escassez / self.tau)
         )
-        return np.clip(gamma, self.gamma_min, self.gamma_max)
-
+        return np.clip(gamma, self.gamma_minimo, self.gamma_maximo)

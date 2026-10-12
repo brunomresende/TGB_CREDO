@@ -1,0 +1,47 @@
+nome_experimento: rapida
+semente: 125
+numero_repeticoes: 2
+alpha: 0.1
+conjuntos: [airfoil]
+divisao:
+  treino: 0.56
+  calibracao: 0.24
+  teste: 0.20
+qnn:
+  camadas_ocultas: [64, 64]
+  dropout: 0.3
+  epocas: 20
+  paciencia: 5
+  taxa_aprendizado: 0.001
+  decaimento_pesos: 0.000001
+  passo_agendador: 10
+  gamma_agendador: 0.99
+  tamanho_lote: 32
+  numero_amostras_mc: 30
+catboost:
+  iteracoes: 30
+  profundidade: 4
+  regularizacao_l2_folha: 3
+  temperatura_bagging: 1
+gamma:
+  fixo: 0.1
+  minimo: 0.1
+  maximo: 0.75
+  tau: 1.0
+  epsilon: 0.000001
+uacqr:
+  tamanho_ensemble: 20
+epicscore:
+  camadas_ocultas: [16, 16]
+  componentes: 3
+  dropout: 0.5
+  epocas: 15
+  paciencia: 4
+  taxa_aprendizado: 0.001
+  tamanho_lote: 32
+  numero_amostras_mc: 20
+valores_atipicos:
+  numero_vizinhos: 15
+  contaminacao: 0.05
+  fracao_internos_ilr: 0.20
+  fracao_internos_decomposicao: 0.10

@@ -1,5 +1,4 @@
-from .envelope import build_credal_envelope
-from .gamma import AdaptiveGamma, FixedGamma
+from .envelope import construir_envelope_credal
+from .gamma import GammaAdaptativo, GammaFixo
 
-__all__ = ["AdaptiveGamma", "FixedGamma", "build_credal_envelope"]
-
+__all__ = ["GammaAdaptativo", "GammaFixo", "construir_envelope_credal"]

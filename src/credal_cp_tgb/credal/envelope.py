@@ -1,4 +1,4 @@
-"""Construcao do envelope credal a partir de amostras de quantis."""
+"""Construção do envelope credal a partir de amostras de quantis."""
 
 from __future__ import annotations
 
@@ -6,40 +6,39 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
 
-def _sample_matrix(values: ArrayLike, name: str) -> NDArray[np.float64]:
-    matrix = np.asarray(values, dtype=float)
-    if matrix.ndim != 2:
-        raise ValueError(f"{name} deve ter formato (n_amostras, n_observacoes).")
-    return matrix
+def _matriz_amostras(valores: ArrayLike, nome: str) -> NDArray[np.float64]:
+    matriz = np.asarray(valores, dtype=float)
+    if matriz.ndim != 2:
+        raise ValueError(f"{nome} deve ter formato (n_amostras, n_observacoes).")
+    return matriz
 
 
-def build_credal_envelope(
-    lower_samples: ArrayLike,
-    upper_samples: ArrayLike,
+def construir_envelope_credal(
+    amostras_inferiores: ArrayLike,
+    amostras_superiores: ArrayLike,
     gamma: float | ArrayLike,
 ) -> NDArray[np.float64]:
-    """Agrega amostras posteriores em um envelope ``[lower, upper]``.
+    """Agrega amostras posteriores em um envelope ``[inferior, superior]``.
 
-    Para cada observacao x, aplica os quantis gamma(x)/2 nas fronteiras
+    Para cada observação x, aplica os quantis gamma(x)/2 nas fronteiras
     inferiores e 1-gamma(x)/2 nas fronteiras superiores.
     """
-    lower = _sample_matrix(lower_samples, "lower_samples")
-    upper = _sample_matrix(upper_samples, "upper_samples")
-    if lower.shape != upper.shape:
+    inferiores = _matriz_amostras(amostras_inferiores, "amostras_inferiores")
+    superiores = _matriz_amostras(amostras_superiores, "amostras_superiores")
+    if inferiores.shape != superiores.shape:
         raise ValueError("As matrizes de amostras devem ter o mesmo formato.")
 
-    n_observations = lower.shape[1]
-    gamma_values = np.broadcast_to(np.asarray(gamma, dtype=float), (n_observations,))
-    if np.any((gamma_values <= 0) | (gamma_values >= 1)):
+    numero_observacoes = inferiores.shape[1]
+    valores_gamma = np.broadcast_to(np.asarray(gamma, dtype=float), (numero_observacoes,))
+    if np.any((valores_gamma <= 0) | (valores_gamma >= 1)):
         raise ValueError("gamma deve estar estritamente entre 0 e 1.")
 
-    lower_envelope = np.empty(n_observations, dtype=float)
-    upper_envelope = np.empty(n_observations, dtype=float)
-    for index, gamma_x in enumerate(gamma_values):
-        lower_envelope[index] = np.quantile(lower[:, index], gamma_x / 2)
-        upper_envelope[index] = np.quantile(upper[:, index], 1 - gamma_x / 2)
+    envelope_inferior = np.empty(numero_observacoes, dtype=float)
+    envelope_superior = np.empty(numero_observacoes, dtype=float)
+    for indice, gamma_x in enumerate(valores_gamma):
+        envelope_inferior[indice] = np.quantile(inferiores[:, indice], gamma_x / 2)
+        envelope_superior[indice] = np.quantile(superiores[:, indice], 1 - gamma_x / 2)
 
-    if np.any(lower_envelope > upper_envelope):
+    if np.any(envelope_inferior > envelope_superior):
         raise ValueError("O envelope gerado possui fronteiras cruzadas.")
-    return np.column_stack((lower_envelope, upper_envelope))
-
+    return np.column_stack((envelope_inferior, envelope_superior))
