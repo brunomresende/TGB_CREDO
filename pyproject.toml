@@ -24,19 +24,20 @@ dependencies = [
 [project.optional-dependencies]
 catboost = ["catboost>=1.2"]
 bart = ["pymc==5.26.1", "pymc-bart==0.11.0", "arviz==0.22.0"]
+figura-esquema = ["gpjax>=0.13.6,<0.14.0"]
+ilustracao = ["gpjax>=0.13.6,<0.14.0"]
 desenvolvimento = ["pytest>=8", "pytest-cov>=5", "ruff>=0.8"]
 completo = [
   "catboost>=1.2",
   "pymc==5.26.1",
   "pymc-bart==0.11.0",
   "arviz==0.22.0",
+  "gpjax>=0.13.6,<0.14.0",
+  "gpjax>=0.13.6,<0.14.0",
   "pytest>=8",
   "pytest-cov>=5",
   "ruff>=0.8",
 ]
-
-[project.scripts]
-credal-cp-executar = "credal_cp_tgb.linha_comando:principal"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/credal_cp_tgb"]

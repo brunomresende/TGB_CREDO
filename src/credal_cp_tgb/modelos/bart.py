@@ -32,9 +32,7 @@ class BARTHeteroscedastico:
 
         matriz_x = np.asarray(X, dtype=float)
         vetor_y = np.asarray(y, dtype=float).reshape(-1)
-        self.escalonador_y_ = (
-            StandardScaler().fit(vetor_y[:, None]) if self.normalizar_y else None
-        )
+        self.escalonador_y_ = StandardScaler().fit(vetor_y[:, None]) if self.normalizar_y else None
         y_ajuste = (
             self.escalonador_y_.transform(vetor_y[:, None]).reshape(-1)
             if self.escalonador_y_ is not None
@@ -90,15 +88,11 @@ class BARTHeteroscedastico:
                 var_names=["latente"],
                 predictions=True,
                 random_seed=(
-                    self.semente_aleatoria
-                    if semente_aleatoria is None
-                    else semente_aleatoria
+                    self.semente_aleatoria if semente_aleatoria is None else semente_aleatoria
                 ),
                 progressbar=self.barra_progresso,
             )
-        latente = az.extract(
-            posterior, group="predictions", var_names=["latente"]
-        ).to_numpy()
+        latente = az.extract(posterior, group="predictions", var_names=["latente"]).to_numpy()
         media, desvio = latente[0].T, np.exp(latente[1].T)
         if media.shape[0] > numero_amostras:
             gerador = np.random.default_rng(semente_aleatoria)
@@ -118,9 +112,5 @@ class BARTHeteroscedastico:
         return inferior, superior
 
     def prever_quantis(self, X: ArrayLike) -> NDArray[np.float64]:
-        inferior, superior = self.amostrar_quantis(
-            X, numero_amostras=min(self.amostras, 1000)
-        )
-        return np.column_stack(
-            (np.median(inferior, axis=0), np.median(superior, axis=0))
-        )
+        inferior, superior = self.amostrar_quantis(X, numero_amostras=min(self.amostras, 1000))
+        return np.column_stack((np.median(inferior, axis=0), np.median(superior, axis=0)))

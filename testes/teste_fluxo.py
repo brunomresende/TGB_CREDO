@@ -56,3 +56,14 @@ def teste_cqr_e_credo_de_ponta_a_ponta():
         "fracao_epistemica",
         "gamma",
     }
+    np.testing.assert_allclose(
+        parcelas["aleatoria"] + parcelas["epistemica"],
+        parcelas["largura_nao_conformal"],
+    )
+    # A folga conformal e uma terceira parcela e nao deve ser atribuida a
+    # incerteza aleatoria ou epistemica.
+    np.testing.assert_allclose(
+        intervalos[:, 1] - intervalos[:, 0],
+        parcelas["largura_nao_conformal"] + parcelas["folga_calibracao"],
+        atol=1e-14,
+    )

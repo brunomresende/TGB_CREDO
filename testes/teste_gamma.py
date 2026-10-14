@@ -19,3 +19,19 @@ def teste_gamma_adaptativo_ser_limitado_e_menor_longe():
     gamma = modelo.calcular(np.array([[0.0], [10.0]]))
     assert np.all((0.1 <= gamma) & (gamma <= 0.75))
     assert gamma[1] < gamma[0]
+
+
+def teste_gamma_padrao_detecta_lacuna_central():
+    esquerda = np.linspace(-1.0, -0.2, 100, endpoint=False)
+    direita = np.linspace(0.2, 1.0, 100)
+    modelo = GammaAdaptativo(gamma_minimo=0.05).ajustar(
+        np.concatenate((esquerda, direita))[:, None]
+    )
+
+    gamma_denso_esquerda, gamma_lacuna, gamma_denso_direita = modelo.calcular(
+        np.array([[-0.6], [0.0], [0.6]])
+    )
+
+    assert modelo.numero_vizinhos_ == 6
+    assert gamma_lacuna < gamma_denso_esquerda
+    assert gamma_lacuna < gamma_denso_direita

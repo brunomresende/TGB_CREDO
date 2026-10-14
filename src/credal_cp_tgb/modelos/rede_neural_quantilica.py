@@ -88,6 +88,8 @@ class RedeNeuralQuantilica:
     def __post_init__(self) -> None:
         if not 0 < self.alpha < 1:
             raise ValueError("alpha deve estar entre 0 e 1.")
+        # Inclui a inicializacao dos pesos na reproducibilidade do modelo.
+        self._fixar_semente()
         self.niveis_quantis = (self.alpha / 2, 1 - self.alpha / 2)
         self.rede = RedeQuantilica(
             self.tamanho_entrada,
@@ -115,9 +117,7 @@ class RedeNeuralQuantilica:
         )
 
         self.escalonador_x_ = StandardScaler().fit(x_treino) if self.escalonar_x else None
-        self.escalonador_y_ = (
-            StandardScaler().fit(y_treino[:, None]) if self.escalonar_y else None
-        )
+        self.escalonador_y_ = StandardScaler().fit(y_treino[:, None]) if self.escalonar_y else None
         if self.escalonador_x_ is not None:
             x_treino = self.escalonador_x_.transform(x_treino)
             x_validacao = self.escalonador_x_.transform(x_validacao)

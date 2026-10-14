@@ -12,19 +12,24 @@ import pandas as pd
 import torch
 import yaml
 
-from .avaliacao.agregacao import agregar_metricas
-from .avaliacao.metricas import avaliar_intervalos
-from .avaliacao.valores_atipicos import detectar_grupos_valores_atipicos
-from .credal.gamma import GammaAdaptativo, GammaFixo
-from .dados.divisao import dividir_treino_calibracao_teste
-from .dados.preprocessamento import carregar_conjunto_processado
-from .metodos.cqr import RegressorCQR
-from .metodos.credo import RegressorCREDO
-from .metodos.epicscore import RegressorEPICScore
-from .metodos.uacqr import RegressorUACQR
-from .modelos.catboost_quantilico import RegressorQuantilicoCatBoost
-from .modelos.rede_neural_quantilica import RedeNeuralQuantilica
-from .utilitarios.aleatoriedade import fixar_todas_sementes
+from credal_cp_tgb.avaliacao.agregacao import agregar_metricas
+from credal_cp_tgb.avaliacao.metricas import avaliar_intervalos
+from credal_cp_tgb.avaliacao.valores_atipicos import detectar_grupos_valores_atipicos
+from credal_cp_tgb.credal.gamma import GammaAdaptativo, GammaFixo
+from credal_cp_tgb.dados import (
+    carregar_conjunto_processado,
+    dividir_treino_calibracao_teste,
+)
+from credal_cp_tgb.metodos.cqr import RegressorCQR
+from credal_cp_tgb.metodos.credo import RegressorCREDO
+from credal_cp_tgb.metodos.epicscore import RegressorEPICScore
+from credal_cp_tgb.metodos.uacqr import RegressorUACQR
+from credal_cp_tgb.modelos.catboost_quantilico import RegressorQuantilicoCatBoost
+from credal_cp_tgb.modelos.rede_neural_quantilica import RedeNeuralQuantilica
+from credal_cp_tgb.utilitarios.aleatoriedade import (
+    fixar_todas_sementes,
+    gerar_sementes_repeticoes,
+)
 
 
 def carregar_configuracao(caminho: str | Path) -> dict:
@@ -347,12 +352,10 @@ def executar_comparacao(
         encoding="utf-8",
     )
 
-    gerador = np.random.default_rng(configuracao["semente"])
-    sementes = gerador.integers(
-        0,
-        np.iinfo(np.int32).max,
+    sementes = gerar_sementes_repeticoes(
+        configuracao["semente"],
         configuracao["numero_repeticoes"],
-    ).tolist()
+    )
     (diretorio_execucao / "sementes.json").write_text(
         json.dumps(sementes, indent=2),
         encoding="utf-8",

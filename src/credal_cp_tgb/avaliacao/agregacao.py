@@ -38,6 +38,7 @@ def agregar_metricas(resultados: pd.DataFrame) -> pd.DataFrame:
                     "media": float(np.mean(valores)),
                     "desvio_padrao": desvio_padrao,
                     "erro_padrao": erro_padrao,
+                    "dobro_erro_padrao": 2 * erro_padrao,
                     "semilargura_ic95": 1.96 * erro_padrao,
                     "numero_repeticoes": len(valores),
                 }

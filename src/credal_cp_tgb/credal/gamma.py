@@ -34,6 +34,7 @@ class GammaAdaptativo:
     epsilon: float = 1e-6
     constante_vizinhos: float = 6.672
     numero_vizinhos: int | None = None
+    heuristica_vizinhos: str = "log"
 
     def ajustar(self, X: ArrayLike) -> GammaAdaptativo:
         matriz_x = np.asarray(X, dtype=float)
@@ -46,12 +47,17 @@ class GammaAdaptativo:
 
         numero_amostras, dimensao = matriz_x.shape
         if self.numero_vizinhos is None:
-            k = int(
-                np.ceil(
-                    self.constante_vizinhos
-                    * numero_amostras ** (4 / (4 + dimensao))
+            if self.heuristica_vizinhos == "log":
+                k = int(np.ceil(dimensao * np.log(numero_amostras)))
+            elif self.heuristica_vizinhos == "potencia":
+                k = int(
+                    np.ceil(
+                        self.constante_vizinhos
+                        * numero_amostras ** (4 / (4 + dimensao))
+                    )
                 )
-            )
+            else:
+                raise ValueError("heuristica_vizinhos deve ser 'log' ou 'potencia'.")
         else:
             k = int(self.numero_vizinhos)
         self.numero_vizinhos_ = max(2, min(k, numero_amostras))

@@ -6,6 +6,16 @@ import numpy as np
 import torch
 
 
+def gerar_sementes_repeticoes(semente_inicial: int, numero_repeticoes: int) -> list[int]:
+    """Reproduz exatamente a sequência de sementes usada no código oficial."""
+    gerador = np.random.RandomState(semente_inicial)
+    return gerador.randint(
+        0,
+        np.iinfo(np.int32).max,
+        size=numero_repeticoes,
+    ).tolist()
+
+
 def fixar_todas_sementes(
     semente: int,
     *,

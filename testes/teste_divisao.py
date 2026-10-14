@@ -1,6 +1,6 @@
 import numpy as np
 
-from credal_cp_tgb.dados.divisao import dividir_treino_calibracao_teste
+from credal_cp_tgb.dados import dividir_treino_calibracao_teste
 
 
 def teste_tamanhos_divisao_artigo():
