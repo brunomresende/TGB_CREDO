@@ -1,0 +1,8 @@
+{
+  "status": "concluida",
+  "dataset": "electric",
+  "numero_repeticoes": 30,
+  "numero_metodos": 9,
+  "numero_linhas_metricas": 270,
+  "origem_consolidada": "resultados/brutos/execucoes_originais/reproducao_artigo_completa_20261014"
+}

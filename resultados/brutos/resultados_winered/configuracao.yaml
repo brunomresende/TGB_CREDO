@@ -1,0 +1,58 @@
+nome_experimento: resultados_winered
+semente: 125
+numero_repeticoes: 30
+alpha: 0.1
+conjuntos:
+- winered
+divisao:
+  treino: 0.56
+  calibracao: 0.24
+  teste: 0.2
+qnn:
+  camadas_ocultas:
+  - 128
+  - 128
+  - 64
+  dropout: 0.3
+  epocas: 2000
+  paciencia: 50
+  taxa_aprendizado: 0.001
+  decaimento_pesos: 1.0e-06
+  passo_agendador: 10
+  gamma_agendador: 0.99
+  tamanho_lote_pequeno: 32
+  tamanho_lote_grande: 120
+  tamanho_lote_wec: 250
+  numero_amostras_mc: 1000
+catboost:
+  iteracoes: 1000
+  profundidade: 6
+  regularizacao_l2_folha: 3
+  temperatura_bagging: 1
+gamma:
+  fixo: 0.1
+  minimo: 0.1
+  maximo: 0.75
+  tau: 1.0
+  epsilon: 1.0e-06
+  constante_vizinhos: 6.672
+uacqr:
+  tamanho_ensemble: 1000
+epicscore:
+  camadas_ocultas:
+  - 64
+  - 64
+  componentes: 5
+  dropout: 0.5
+  epocas: 2000
+  paciencia: 50
+  taxa_aprendizado: 0.001
+  tamanho_lote_pequeno: 40
+  tamanho_lote_grande: 130
+  tamanho_lote_wec: 250
+  numero_amostras_mc: 500
+valores_atipicos:
+  numero_vizinhos: 15
+  contaminacao: 0.05
+  fracao_internos_ilr: 0.2
+  fracao_internos_decomposicao: 0.1
