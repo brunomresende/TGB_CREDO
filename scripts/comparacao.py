@@ -30,6 +30,7 @@ from credal_cp_tgb.utilitarios.aleatoriedade import (
     fixar_todas_sementes,
     gerar_sementes_repeticoes,
 )
+from credal_cp_tgb.utilitarios.tempo import calcular_tempo_total_metodo
 
 
 def carregar_configuracao(caminho: str | Path) -> dict:
@@ -158,10 +159,12 @@ def executar_repeticao(
         ),
     }
     for nome, metodo in metodos_qnn.items():
+        inicio_metodo = time.perf_counter()
         metodo.calibrar(divisao.x_calibracao, divisao.y_calibracao)
         inicio = time.perf_counter()
         intervalos = metodo.prever(divisao.x_teste)
-        tempo_predicao = time.perf_counter() - inicio
+        fim_metodo = time.perf_counter()
+        tempo_predicao = fim_metodo - inicio
         linhas.append(
             {
                 **informacoes_comuns,
@@ -169,6 +172,11 @@ def executar_repeticao(
                 "modelo_base": "QNN",
                 "segundos_ajuste_compartilhado": tempo_ajuste_qnn,
                 "segundos_predicao": tempo_predicao,
+                "segundos_total_metodo": calcular_tempo_total_metodo(
+                    tempo_ajuste_qnn,
+                    inicio_metodo,
+                    fim_metodo,
+                ),
             }
         )
 
@@ -198,6 +206,7 @@ def executar_repeticao(
         ),
     }
     for nome, metodo in metodos_credo.items():
+        inicio_metodo = time.perf_counter()
         metodo.ajustar(divisao.x_treino, divisao.y_treino)
         metodo.calibrar(divisao.x_calibracao, divisao.y_calibracao)
         inicio = time.perf_counter()
@@ -205,7 +214,8 @@ def executar_repeticao(
             divisao.x_teste,
             retornar_decomposicao=True,
         )
-        tempo_predicao = time.perf_counter() - inicio
+        fim_metodo = time.perf_counter()
+        tempo_predicao = fim_metodo - inicio
         fracao_epistemica_atipicos = float(
             np.mean(decomposicao["fracao_epistemica"][grupos.valores_atipicos])
         )
@@ -219,6 +229,11 @@ def executar_repeticao(
                 "modelo_base": "QNN",
                 "segundos_ajuste_compartilhado": tempo_ajuste_qnn,
                 "segundos_predicao": tempo_predicao,
+                "segundos_total_metodo": calcular_tempo_total_metodo(
+                    tempo_ajuste_qnn,
+                    inicio_metodo,
+                    fim_metodo,
+                ),
                 "fracao_epistemica_atipicos": fracao_epistemica_atipicos,
                 "fracao_epistemica_internos": fracao_epistemica_internos,
             }
@@ -242,17 +257,25 @@ def executar_repeticao(
                 relativo=relativo,
                 modelo_base_ajustado=True,
             )
+            inicio_metodo = time.perf_counter()
             metodo.calibrar(divisao.x_calibracao, divisao.y_calibracao)
             intervalos = metodo.prever(divisao.x_teste)
+            fim_metodo = time.perf_counter()
             linhas.append(
                 {
                     **informacoes_comuns,
                     **_avaliar(nome, intervalos, divisao, grupos, alpha),
                     "modelo_base": "CatBoost",
                     "segundos_ajuste_compartilhado": tempo_ajuste_catboost,
+                    "segundos_total_metodo": calcular_tempo_total_metodo(
+                        tempo_ajuste_catboost,
+                        inicio_metodo,
+                        fim_metodo,
+                    ),
                 }
             )
 
+        inicio_metodo = time.perf_counter()
         uacqr = RegressorUACQR(
             catboost,
             alpha=alpha,
@@ -261,13 +284,21 @@ def executar_repeticao(
             semente_aleatoria=semente,
         ).ajustar(divisao.x_treino, divisao.y_treino)
         uacqr.calibrar(divisao.x_calibracao, divisao.y_calibracao)
-        for nome, intervalos in uacqr.prever(divisao.x_teste).items():
+        intervalos_uacqr = uacqr.prever(divisao.x_teste)
+        fim_metodo = time.perf_counter()
+        tempo_total_uacqr = calcular_tempo_total_metodo(
+            tempo_ajuste_catboost,
+            inicio_metodo,
+            fim_metodo,
+        )
+        for nome, intervalos in intervalos_uacqr.items():
             linhas.append(
                 {
                     **informacoes_comuns,
                     **_avaliar(f"{nome}-CatBoost", intervalos, divisao, grupos, alpha),
                     "modelo_base": "CatBoost",
                     "segundos_ajuste_compartilhado": tempo_ajuste_catboost,
+                    "segundos_total_metodo": tempo_total_uacqr,
                 }
             )
 
@@ -289,9 +320,11 @@ def executar_repeticao(
                     "tamanho_lote_pequeno",
                     config_epic.get("tamanho_lote", 40),
                 )
+            config_epic.pop("tamanho_lote_pequeno", None)
             config_epic.pop("tamanho_lote_grande", None)
             config_epic.pop("tamanho_lote_wec", None)
             config_epic["tamanho_lote"] = tamanho_lote_epic
+            inicio_metodo = time.perf_counter()
             epic = RegressorEPICScore(
                 catboost,
                 alpha=alpha,
@@ -300,18 +333,25 @@ def executar_repeticao(
                 **config_epic,
             ).ajustar(divisao.x_treino, divisao.y_treino)
             epic.calibrar(divisao.x_calibracao, divisao.y_calibracao)
+            intervalos_epic = epic.prever(divisao.x_teste)
+            fim_metodo = time.perf_counter()
             linhas.append(
                 {
                     **informacoes_comuns,
                     **_avaliar(
                         "EPICScore-CatBoost-MDN",
-                        epic.prever(divisao.x_teste),
+                        intervalos_epic,
                         divisao,
                         grupos,
                         alpha,
                     ),
                     "modelo_base": "CatBoost+MDN",
                     "segundos_ajuste_compartilhado": tempo_ajuste_catboost,
+                    "segundos_total_metodo": calcular_tempo_total_metodo(
+                        tempo_ajuste_catboost,
+                        inicio_metodo,
+                        fim_metodo,
+                    ),
                 }
             )
     return linhas
