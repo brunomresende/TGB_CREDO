@@ -97,6 +97,11 @@ class RegressorUACQR:
                 base[:, 1] + self.limiar_s_ * dispersao_superior,
             )
         )
-        indice = min(self.limiar_p_, ordem_inferior.shape[0] - 1)
+        # O ultimo indice e a sentinela (+/- infinito). Quando a calibracao
+        # seleciona esse nivel, usamos o limite mais conservador ainda finito.
+        # Isso preserva todas as repeticoes para agregacao sem propagar valores
+        # infinitos para SMIS, comprimento e ILR.
+        ultimo_indice_finito = ordem_inferior.shape[0] - 2
+        indice = min(self.limiar_p_, ultimo_indice_finito)
         intervalos_p = np.column_stack((ordem_inferior[indice], ordem_superior[indice]))
         return {"UACQR-S": intervalos_s, "UACQR-P": intervalos_p}

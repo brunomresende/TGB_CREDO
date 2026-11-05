@@ -1,6 +1,7 @@
 import numpy as np
 
 from credal_cp_tgb.avaliacao.metricas import (
+    avaliar_intervalos,
     cobertura_marginal,
     comprimento_medio_intervalo,
     escore_medio_intervalo_escalonado,
@@ -26,3 +27,29 @@ def teste_ilr():
         [2, 3],
         [0, 1],
     ) == 2.0
+
+
+def teste_avaliacao_remove_intervalos_infinitos_e_preserva_indices_dos_grupos():
+    y = np.array([0.0, 10.0, 5.0, 3.0])
+    intervalos = np.array(
+        [
+            [-0.5, 0.5],
+            [-np.inf, np.inf],
+            [1.0, 3.0],
+            [2.0, 4.0],
+        ]
+    )
+
+    resultado = avaliar_intervalos(
+        y,
+        intervalos,
+        alpha=0.1,
+        indices_atipicos=np.array([0, 1]),
+        indices_internos=np.array([2, 3]),
+    )
+
+    assert all(np.isfinite(valor) for valor in resultado.values())
+    assert resultado["amc"] == 2 / 3
+    assert resultado["aco"] == 1.0
+    assert resultado["il"] == 5 / 3
+    assert resultado["ilr"] == 0.5

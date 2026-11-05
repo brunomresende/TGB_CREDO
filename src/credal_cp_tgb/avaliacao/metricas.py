@@ -86,17 +86,45 @@ def avaliar_intervalos(
     indices_internos: ArrayLike | None = None,
 ) -> dict[str, float]:
     valores = np.asarray(intervalos, dtype=float)
+    vetor_y = np.asarray(y, dtype=float).reshape(-1)
+    if valores.ndim != 2 or valores.shape != (vetor_y.size, 2):
+        raise ValueError("intervalos deve possuir formato (n_observacoes, 2).")
+
+    # O UACQR-P inclui +/- infinito como o ultimo nivel conservador de sua
+    # estatistica de ordem. A avaliacao de referencia remove essas observacoes
+    # antes de calcular as metricas, pois comprimentos infinitos tornariam
+    # SMIS, IL, PCorr e ILR indefinidos.
+    mascara_finita = np.isfinite(valores).all(axis=1) & np.isfinite(vetor_y)
+    if not np.any(mascara_finita):
+        raise ValueError("Nenhum intervalo finito disponivel para avaliacao.")
+
     inferior, superior = valores[:, 0], valores[:, 1]
     resultado = {
-        "amc": cobertura_marginal(y, inferior, superior),
-        "smis": escore_medio_intervalo_escalonado(y, inferior, superior, alpha),
-        "il": comprimento_medio_intervalo(inferior, superior),
-        "pcorr": correlacao_cobertura_largura(y, inferior, superior),
+        "amc": cobertura_marginal(
+            vetor_y[mascara_finita], inferior[mascara_finita], superior[mascara_finita]
+        ),
+        "smis": escore_medio_intervalo_escalonado(
+            vetor_y[mascara_finita],
+            inferior[mascara_finita],
+            superior[mascara_finita],
+            alpha,
+        ),
+        "il": comprimento_medio_intervalo(
+            inferior[mascara_finita], superior[mascara_finita]
+        ),
+        "pcorr": correlacao_cobertura_largura(
+            vetor_y[mascara_finita], inferior[mascara_finita], superior[mascara_finita]
+        ),
     }
     if indices_atipicos is not None and indices_internos is not None:
         indices_atipicos = np.asarray(indices_atipicos, dtype=int)
+        indices_internos = np.asarray(indices_internos, dtype=int)
+        indices_atipicos = indices_atipicos[mascara_finita[indices_atipicos]]
+        indices_internos = indices_internos[mascara_finita[indices_internos]]
+        if indices_atipicos.size == 0:
+            raise ValueError("Nenhum intervalo finito no grupo de valores atipicos.")
         resultado["aco"] = cobertura_marginal(
-            np.asarray(y)[indices_atipicos],
+            vetor_y[indices_atipicos],
             inferior[indices_atipicos],
             superior[indices_atipicos],
         )
@@ -104,6 +132,6 @@ def avaliar_intervalos(
             inferior,
             superior,
             indices_atipicos,
-            np.asarray(indices_internos, dtype=int),
+            indices_internos,
         )
     return resultado
