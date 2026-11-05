@@ -1,7 +1,7 @@
 """Gera uma grade CREDO-BART para diferentes valores de alpha e gamma.
 
 Execute na raiz do projeto:
-    uv run --extra bart python credo_alpha_gamma_grid.py
+    uv run --extra bart python experimentos/credo_alpha_gamma_grid.py
 """
 
 from pathlib import Path
@@ -17,7 +17,7 @@ from credal_cp_tgb.metodos.credo import RegressorCREDO
 from credal_cp_tgb.modelos.bart import BARTHeteroscedastico
 
 SEMENTE = 125
-RESULTADOS_DIR = Path(__file__).resolve().parent / "resultados" / "figuras"
+RESULTADOS_DIR = Path(__file__).resolve().parents[1] / "resultados" / "figuras"
 
 
 def gerar_dados_com_lacuna(

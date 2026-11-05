@@ -185,8 +185,9 @@ Os exemplos didáticos e simulados foram reunidos em oito histórias completas:
 | `07_credo_gamma_adaptativo_vs_fixo.py` | comparação entre gamma adaptativo e fixo |
 | `08_convergencia_quantis_verdadeiros.py` | convergência em relação aos quantis verdadeiros |
 
-Os scripts `credo_alpha_gamma_grid.py`, `credo_adaptive_gamma_grid.py` e
-`credo_adaptive_gamma_min_max_grid.py`, na raiz, geram as grades usadas para
+Os scripts `experimentos/credo_alpha_gamma_grid.py`,
+`experimentos/credo_adaptive_gamma_grid.py` e
+`experimentos/credo_adaptive_gamma_min_max_grid.py` geram as grades usadas para
 analisar a sensibilidade dos intervalos aos parâmetros do CREDO.
 
 Depois das execuções com dados reais,
