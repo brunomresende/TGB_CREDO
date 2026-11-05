@@ -16,6 +16,7 @@ resultados/resumos/*
 resultados/tabelas/*
 resultados/figuras/*
 !resultados/**/.gitkeep
+documentacao/
 *.log
 .DS_Store
 .idea/
