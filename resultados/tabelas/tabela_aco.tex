@@ -1,0 +1,25 @@
+\begin{table*}[htbp]
+\centering
+\caption{Cobertura nos valores atípicos. Cada célula apresenta média (erro-padrão), calculados sobre 30 repetições. O negrito identifica o melhor resultado e os empates segundo intervalos de confiança de 95\%.}
+\label{tab:aco}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccccc}
+\toprule
+Dataset & CREDO & CREDO (adap.) & CQR (QNN) & CQR-r (QNN) & CQR (CatBoost) & CQR-r (CatBoost) & UACQR-S & UACQR-P & EPIC \\
+\midrule
+concrete & \textbf{0.915 (0.013)} & \textbf{0.924 (0.013)} & \textbf{0.900 (0.020)} & \textbf{0.900 (0.020)} & \textbf{0.861 (0.023)} & \textbf{0.864 (0.024)} & \textbf{0.882 (0.025)} & 0.861 (0.020) & \textbf{0.882 (0.023)} \\
+airfoil & \textbf{0.894 (0.018)} & \textbf{0.894 (0.017)} & \textbf{0.891 (0.014)} & \textbf{0.891 (0.014)} & \textbf{0.886 (0.020)} & \textbf{0.883 (0.025)} & \textbf{0.898 (0.021)} & \textbf{0.910 (0.017)} & \textbf{0.907 (0.018)} \\
+winewhite & \textbf{0.906 (0.007)} & \textbf{0.907 (0.006)} & \textbf{0.888 (0.009)} & \textbf{0.886 (0.008)} & 0.856 (0.009) & 0.857 (0.010) & \textbf{0.890 (0.008)} & 0.874 (0.007) & \textbf{0.887 (0.009)} \\
+star & \textbf{0.880 (0.010)} & 0.877 (0.012) & 0.870 (0.013) & 0.871 (0.013) & 0.789 (0.016) & 0.756 (0.017) & 0.853 (0.014) & 0.844 (0.011) & 0.820 (0.017) \\
+winered & \textbf{0.885 (0.017)} & \textbf{0.885 (0.017)} & \textbf{0.863 (0.020)} & 0.860 (0.020) & 0.821 (0.023) & 0.794 (0.024) & 0.833 (0.024) & 0.833 (0.023) & 0.860 (0.020) \\
+cycle & \textbf{0.894 (0.007)} & \textbf{0.908 (0.006)} & \textbf{0.896 (0.006)} & \textbf{0.897 (0.006)} & 0.859 (0.007) & 0.849 (0.008) & 0.864 (0.007) & 0.880 (0.008) & 0.861 (0.007) \\
+electric & 0.907 (0.003) & \textbf{0.903 (0.004)} & \textbf{0.907 (0.005)} & \textbf{0.909 (0.005)} & \textbf{0.906 (0.005)} & \textbf{0.901 (0.006)} & \textbf{0.895 (0.006)} & \textbf{0.900 (0.005)} & 0.911 (0.004) \\
+meps19 & \textbf{0.905 (0.005)} & \textbf{0.906 (0.004)} & \textbf{0.896 (0.004)} & \textbf{0.898 (0.004)} & \textbf{0.896 (0.004)} & \textbf{0.895 (0.004)} & \textbf{0.904 (0.004)} & 0.939 (0.006) & \textbf{0.897 (0.004)} \\
+superconductivity & 0.921 (0.004) & 0.911 (0.004) & \textbf{0.903 (0.004)} & \textbf{0.894 (0.004)} & 0.871 (0.005) & 0.884 (0.004) & 0.871 (0.004) & 0.880 (0.004) & 0.875 (0.005) \\
+homes & 0.918 (0.003) & 0.917 (0.003) & \textbf{0.900 (0.004)} & \textbf{0.896 (0.004)} & 0.890 (0.004) & \textbf{0.894 (0.003)} & 0.888 (0.005) & \textbf{0.901 (0.003)} & \textbf{0.903 (0.004)} \\
+protein & \textbf{0.901 (0.002)} & \textbf{0.902 (0.002)} & \textbf{0.894 (0.003)} & \textbf{0.896 (0.003)} & 0.888 (0.003) & 0.888 (0.003) & 0.887 (0.003) & 0.889 (0.003) & 0.894 (0.003) \\
+WEC & \textbf{0.866 (0.004)} & 0.848 (0.004) & 0.829 (0.004) & 0.830 (0.003) & 0.847 (0.004) & 0.849 (0.004) & 0.847 (0.004) & 0.852 (0.004) & 0.844 (0.005) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
