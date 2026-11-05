@@ -184,7 +184,7 @@ def criar_figura(divisao, credo_bart: RegressorCREDO, cqr_rfqr: RegressorCQR) ->
     )
     eixo.plot(eixo_x, intervalos_cqr.mean(axis=1), color="C1", linewidth=1)
     eixo.axvspan(0.0, 0.4, color="grey", alpha=0.12)
-    eixo.set(title="CQR-RFQR", xlabel="x", ylim=(-1.35, 3.0))
+    eixo.set(title="CQR-QRF", xlabel="x", ylim=(-1.35, 3.0))
     eixo.grid(True, alpha=0.3)
 
     eixo = eixos[1, 0]
